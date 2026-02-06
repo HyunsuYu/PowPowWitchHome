@@ -60,6 +60,7 @@
             overflow: hidden;
             /* Diagonal Split Background */
             background: linear-gradient(115deg, #FFF3E0 50%, #E0F7FA 50%);
+            padding: 20px; /* 모바일 안전 여백 */
         }
 
         /* Floating Elements Animation */
@@ -68,6 +69,7 @@
             pointer-events: none;
             opacity: 0.6;
             animation: float 6s ease-in-out infinite;
+            z-index: 1;
         }
         
         @keyframes float {
@@ -86,7 +88,7 @@
             backdrop-filter: blur(5px);
             border: 4px solid #fff;
             max-width: 700px;
-            width: 90%;
+            width: 100%; /* 모바일 대응을 위해 90% -> 100% */
             animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -110,6 +112,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1));
+            word-break: keep-all; /* 단어 단위 줄바꿈 */
         }
 
         .subtitle {
@@ -119,9 +122,18 @@
             font-family: 'Gaegu', cursive;
         }
 
+        .hero-desc {
+            margin-bottom: 30px; 
+            font-size: 1.2rem; 
+            line-height: 1.6; 
+            color: #6D4C41;
+            word-break: keep-all;
+        }
+
         .cta-btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
             background: #FFCA28;
             color: #5D4037;
@@ -133,6 +145,8 @@
             border: none;
             border-bottom: 5px solid #FFA000;
             cursor: pointer;
+            width: auto;
+            max-width: 100%;
         }
 
         .cta-btn:hover {
@@ -161,9 +175,13 @@
             font-size: 2.5rem;
             margin-bottom: 50px;
             position: relative;
-            display: inline-block;
-            left: 50%;
-            transform: translateX(-50%);
+            
+            /* Center Alignment Fix */
+            display: table;
+            margin-left: auto;
+            margin-right: auto;
+            
+            white-space: nowrap;
         }
         
         .section-title::after {
@@ -174,7 +192,7 @@
             background: rgba(255, 202, 40, 0.4);
             position: absolute;
             bottom: 5px;
-            z-index: -1;
+            z-index: 1;
             border-radius: 5px;
         }
 
@@ -191,6 +209,9 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             transition: 0.3s;
             border: 3px solid transparent;
+            /* 중요: 내부 컨텐츠가 넘치지 않게 하기 위함 */
+            display: flex;
+            flex-direction: column;
         }
 
         .card:hover {
@@ -198,64 +219,42 @@
         }
 
         /* Forest Card Style */
-        .card.forest {
-            border-color: #FFE0B2;
-        }
-        .card.forest .card-header {
-            background: #FFF3E0;
-            color: #E64A19;
-        }
-        .card.forest .card-icon {
-            background: #FFCC80;
-            color: #BF360C;
-        }
+        .card.forest { border-color: #FFE0B2; }
+        .card.forest .card-header { background: #FFF3E0; color: #E64A19; }
+        .card.forest .card-icon { background: #FFCC80; color: #BF360C; }
 
         /* Ocean Card Style */
-        .card.ocean {
-            border-color: #B2EBF2;
-        }
-        .card.ocean .card-header {
-            background: #E0F7FA;
-            color: #0097A7;
-        }
-        .card.ocean .card-icon {
-            background: #80DEEA;
-            color: #006064;
-        }
+        .card.ocean { border-color: #B2EBF2; }
+        .card.ocean .card-header { background: #E0F7FA; color: #0097A7; }
+        .card.ocean .card-icon { background: #80DEEA; color: #006064; }
 
         /* Crafting Card Style */
-        .card.craft {
-            border-color: #E1BEE7;
-        }
-        .card.craft .card-icon {
-            background: #BA68C8;
-            color: #fff;
-        }
+        .card.craft { border-color: #E1BEE7; }
+        .card.craft .card-icon { background: #BA68C8; color: #fff; }
 
         /* Housing Card Style */
-        .card.housing {
-            border-color: #FFCDD2;
-        }
-        .card.housing .card-icon {
-            background: #E57373;
-            color: #fff;
-        }
+        .card.housing { border-color: #FFCDD2; }
+        .card.housing .card-icon { background: #E57373; color: #fff; }
 
         .card-img {
             width: 100%;
             height: 250px;
-            object-fit: cover;
             background: #eee;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            color: #999;
+            position: relative;
+            overflow: hidden; /* 이미지가 둥근 모서리를 넘지 않도록 */
+        }
+        
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 비율 유지하며 꽉 채우기 */
+            display: block;
         }
 
         .card-body {
             padding: 30px;
             text-align: center;
+            flex-grow: 1; /* 카드 높이 맞추기 */
         }
 
         .card-icon {
@@ -276,11 +275,17 @@
             font-size: 1.8rem;
             margin-bottom: 10px;
         }
+        
+        .card p {
+            font-size: 1.3rem;
+            word-break: keep-all;
+        }
 
         /* --- SCREENSHOTS --- */
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            /* 모바일 최적화를 위해 minmax 값을 조정 */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
         }
 
@@ -291,6 +296,8 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             transition: 0.3s;
             background: #fff;
+            /* Aspect ratio to prevent layout shifts */
+            aspect-ratio: 16/9;
         }
 
         .screenshot:hover {
@@ -299,7 +306,8 @@
 
         .screenshot img {
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
             display: block;
         }
 
@@ -317,6 +325,7 @@
             gap: 30px;
             flex-wrap: wrap;
             margin-top: 30px;
+            padding: 0 20px;
         }
 
         .team-member {
@@ -326,6 +335,7 @@
             font-size: 1.2rem;
             color: #757575;
             border: 2px dashed #E0E0E0;
+            white-space: nowrap;
         }
 
         /* --- FOOTER --- */
@@ -343,11 +353,45 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        /* Mobile */
-        @media (max-width: 768px) {
-            .hero { background: linear-gradient(180deg, #FFF3E0 50%, #E0F7FA 50%); }
+        /* --- MOBILE RESPONSIVE --- */
+        @media (max-width: 900px) {
+            /* Hero Background Change: Vertical Split for Mobile */
+            .hero {
+                background: linear-gradient(180deg, #FFF3E0 40%, #E0F7FA 100%);
+                padding-top: 80px;
+                padding-bottom: 80px;
+            }
+            
+            .hero-content {
+                padding: 30px 20px;
+                width: 100%;
+            }
+
             .title-logo { font-size: 3rem; }
-            .grid-2 { grid-template-columns: 1fr; }
+            .subtitle { font-size: 1.4rem; }
+            .cta-btn { font-size: 1.2rem; padding: 15px 30px; }
+            
+            /* Floaters: Reduce visual noise or hide if needed */
+            .floater { opacity: 0.4; transform: scale(0.8); }
+
+            /* Grid Stacking */
+            .grid-2 { grid-template-columns: 1fr; gap: 40px; }
+            
+            /* Card Image Aspect Ratio */
+            .card-img { height: 200px; }
+            
+            /* Section Padding */
+            .section { padding: 50px 20px; }
+            .section-title { font-size: 2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .title-logo { font-size: 2.5rem; }
+            .badge { font-size: 0.9rem; }
+            .hero-desc { font-size: 1rem; }
+            
+            .team-list { gap: 15px; }
+            .team-member { padding: 10px 20px; font-size: 1rem; width: 100%; }
         }
     </style>
 </head>
@@ -356,19 +400,19 @@
     <!-- HERO SECTION -->
     <header class="hero">
         <!-- Floating Decorations (Forest Side) -->
-        <i data-lucide="leaf" class="floater" style="top: 20%; left: 10%; color: #FFCC80; width: 40px; height: 40px;"></i>
-        <i data-lucide="flower" class="floater" style="top: 60%; left: 20%; color: #FFAB91; width: 30px; height: 30px; animation-delay: 1s;"></i>
+        <i data-lucide="leaf" class="floater" style="top: 10%; left: 5%; color: #FFCC80; width: 40px; height: 40px;"></i>
+        <i data-lucide="flower" class="floater" style="top: 50%; left: 5%; color: #FFAB91; width: 30px; height: 30px; animation-delay: 1s;"></i>
         
         <!-- Floating Decorations (Ocean Side) -->
-        <i data-lucide="droplets" class="floater" style="top: 15%; right: 15%; color: #80DEEA; width: 50px; height: 50px; animation-delay: 2s;"></i>
-        <i data-lucide="fish" class="floater" style="top: 70%; right: 10%; color: #4DD0E1; width: 40px; height: 40px; animation-delay: 1.5s;"></i>
+        <i data-lucide="droplets" class="floater" style="top: 10%; right: 5%; color: #80DEEA; width: 50px; height: 50px; animation-delay: 2s;"></i>
+        <i data-lucide="fish" class="floater" style="top: 80%; right: 5%; color: #4DD0E1; width: 40px; height: 40px; animation-delay: 1.5s;"></i>
 
         <div class="hero-content">
             <span class="badge hand-font">Global Game Jam 2026</span>
             <h1 class="title-logo">포우포우 위치</h1>
             <p class="subtitle">숲과 바다의 채집 마법</p>
             
-            <p style="margin-bottom: 30px; font-size: 1.2rem; line-height: 1.6; color: #6D4C41;">
+            <p class="hero-desc">
                 귀여운 마녀가 되어 신비한 숲과 깊은 바다를 탐험해보세요.<br>
                 재료를 모아 특별한 가구를 만들고, 집을 꾸미세요!
             </p>
@@ -388,18 +432,15 @@
             <div class="grid-2">
                 <!-- Forest Card -->
                 <div class="card forest">
-                    <div class="card-img" style="background: #FFF8E1;">
-                        <!-- Placeholder using Title Image Style -->
-                        <div style="text-align:center;">
-                            <img src="./src/Forest.png" alt="Forest Gameplay" style="width:100%; height:100%; object-fit:cover;">
-                        </div>
+                    <div class="card-img">
+                        <img src="./src/Forest.png" alt="Forest Gameplay">
                     </div>
                     <div class="card-body">
                         <div class="card-icon">
                             <i data-lucide="trees" size="32"></i>
                         </div>
                         <h3>따뜻한 숲</h3>
-                        <p class="hand-font" style="font-size: 1.3rem;">
+                        <p class="hand-font">
                             가을빛으로 물든 숲속을 거닐며<br>
                             꿀과 씨앗, 꽃을 채집하세요.
                         </p>
@@ -408,18 +449,15 @@
 
                 <!-- Ocean Card -->
                 <div class="card ocean">
-                    <div class="card-img" style="background: #E0F7FA;">
-                        <!-- Placeholder using Title Image Style -->
-                        <div style="text-align:center;">
-                            <img src="./src/Undersea.png" alt="Ocean Gameplay" style="width:100%; height:100%; object-fit:cover;">
-                        </div>
+                    <div class="card-img">
+                        <img src="./src/Undersea.png" alt="Ocean Gameplay">
                     </div>
                     <div class="card-body">
                         <div class="card-icon">
                             <i data-lucide="waves" size="32"></i>
                         </div>
                         <h3>시원한 바다</h3>
-                        <p class="hand-font" style="font-size: 1.3rem;">
+                        <p class="hand-font">
                             투명한 바닷속으로 잠수하여<br>
                             조개와 산호, 진주를 발견하세요.
                         </p>
@@ -437,17 +475,15 @@
             <div class="grid-2">
                 <!-- Crafting -->
                 <div class="card craft">
-                    <div class="card-img" style="background: #F3E5F5;">
-                        <div style="text-align:center;">
-                            <img src="./src/Crafting.png" alt="Crafting" style="width:100%; height:100%; object-fit:cover;">
-                        </div>
+                    <div class="card-img">
+                        <img src="./src/Crafting.png" alt="Crafting">
                     </div>
                     <div class="card-body">
                         <div class="card-icon">
                             <i data-lucide="hammer" size="32"></i>
                         </div>
                         <h3>아이템 제작</h3>
-                        <p class="hand-font" style="font-size: 1.3rem;">
+                        <p class="hand-font">
                             채집한 재료를 솥에 넣고<br>
                             새로운 마법 가구를 만드세요.
                         </p>
@@ -456,17 +492,15 @@
 
                 <!-- Housing -->
                 <div class="card housing">
-                    <div class="card-img" style="background: #FFEBEE;">
-                        <div style="text-align:center;">
-                            <img src="./src/Home.png" alt="Housing" style="width:100%; height:100%; object-fit:cover;">
-                        </div>
+                    <div class="card-img">
+                        <img src="./src/Home.png" alt="Housing">
                     </div>
                     <div class="card-body">
                         <div class="card-icon">
                             <i data-lucide="armchair" size="32"></i>
                         </div>
                         <h3>집 꾸미기</h3>
-                        <p class="hand-font" style="font-size: 1.3rem;">
+                        <p class="hand-font">
                             가구를 배치하고 벽지를 바꿔<br>
                             나만의 아늑한 공간을 완성하세요.
                         </p>
@@ -481,7 +515,6 @@
         <div class="container">
             <h2 class="section-title">스크린샷</h2>
             <div class="gallery-grid">
-                <!-- Using placeholders, user should replace src with real screenshots -->
                 <div class="screenshot">
                     <img src="./src/ScreenShot_0.png" alt="Screenshot 1">
                 </div>
@@ -511,6 +544,7 @@
 
     <footer>
         <p>&copy; 2026 Team PowPow. Developed for Global Game Jam.</p>
+        <p style="margin-top: 10px; opacity: 0.6;">Designed with Warmth & Coolness.</p>
     </footer>
 
     <script>
